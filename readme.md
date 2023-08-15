@@ -1,8 +1,8 @@
 # MultiPDF Chat App
 
-Inspired from these tutorial with modification to make it work with Pinecone as Vector Store.
-- [YouTube](https://youtu.be/dXxQ0LR-3Hg) .
-- [Youtube](https://www.youtube.com/watch?v=ckb4DnHLBrU)
+Inspired from these tutorials with modifications.
+- [Chat with Multiple PDFs | LangChain App Tutorial in Python (Free LLMs and Embeddings)](https://youtu.be/dXxQ0LR-3Hg) .
+- [LangChain: Chat with Books and PDF Files with Llama 2 and Pinecone (Free LLMs & Embeddings)](https://www.youtube.com/watch?v=ckb4DnHLBrU)
 
 ## Introduction
 ------------
