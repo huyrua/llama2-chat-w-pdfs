@@ -33,7 +33,7 @@ Install the required dependencies by running the following command:
    ```
    pip install -r requirements.txt
    ```
-Optain these info for authorization:
+Prepare these info:
 - Huggingface API Token: needed when you want to download the LLM from Huggingface at run time. If you choose to pre-download, store and load the model locally, you don't need this token 
 - Pinecone API Key: use for Pinecone auth
 - Pinecone API Env: Pinecone API environment where the Index was created
