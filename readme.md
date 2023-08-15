@@ -15,7 +15,7 @@ The application follows these steps to provide responses to your questions:
 
 2. Text Chunking: The extracted text is divided into smaller chunks that can be processed effectively. The text chunks are then converted to vectors by [HuggingFaceEmbeddings](https://api.python.langchain.com/en/latest/embeddings/langchain.embeddings.huggingface.HuggingFaceEmbeddings.html) using the model [sentence-transformers/all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2). The vectors are then stored in Pinecone vector database.
 
-3. Language Model: The application utilizes a language model to generate vector representations (embeddings) of the text chunks. In this sample I am using pre-downloaded Llama 2 13B chat model from [TheBloke/Llama-2-13B-chat-GGML](https://huggingface.co/TheBloke/Llama-2-13B-chat-GGML). The model name is llama-2-13b-chat.ggmlv3.q5_1.bin.
+3. Language Model: The application utilizes a language model to generate vector representations (embeddings) of the text chunks. In this sample I am using Llama 2 13B chat model from [TheBloke/Llama-2-13B-chat-GGML](https://huggingface.co/TheBloke/Llama-2-13B-chat-GGML). The model name is llama-2-13b-chat.ggmlv3.q5_1.bin.
 
 4. Similarity Matching: When you ask a question, the app compares it with the text chunks and identifies the most semantically similar ones.
 
