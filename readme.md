@@ -31,11 +31,13 @@ Optain these info for authorization:
 - Huggingface API Token: needed when you want to download the LLM from Huggingface at run time. If you choose to pre-download, store and load the model locally, you don't need this token 
 - Pinecone API Key: use for Pinecone auth
 - Pinecone API Env: Pinecone API environment where the Index was created
+- Pinecone Index name: name of the index used to store embeddings, in Pinecone
 
 Clone the .env.example and rename it to `.env`. Setup the values for below variables:
-- HUGGINGFACEHUB_API_TOKEN=<your Huggingface api token>
-- PINECONE_API_KEY=<your Pinecone API Key>
-- PINECONE_API_ENV=<your Pinecone API Env>
+- HUGGINGFACEHUB_API_TOKEN
+- PINECONE_API_KEY
+- PINECONE_API_ENV
+- PINECONE_INDEX_NAME
 
 ## Usage
 -----
