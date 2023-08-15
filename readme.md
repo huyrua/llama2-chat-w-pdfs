@@ -1,5 +1,9 @@
 # MultiPDF Chat App
 
+Inspired from these tutorial with modification to make it work with Pinecone as Vector Store.
+- [YouTube](https://youtu.be/dXxQ0LR-3Hg) .
+- [Youtube](https://www.youtube.com/watch?v=ckb4DnHLBrU)
+
 ## Introduction
 ------------
 The MultiPDF Chat App is a Python application that allows you to chat with multiple PDF documents. You can ask questions about the PDFs using natural language, and the application will provide relevant responses based on the content of the documents. This app utilizes a language model to generate accurate answers to your queries.
