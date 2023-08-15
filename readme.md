@@ -4,6 +4,8 @@ Inspired from these tutorials with modifications.
 - [Chat with Multiple PDFs | LangChain App Tutorial in Python (Free LLMs and Embeddings)](https://youtu.be/dXxQ0LR-3Hg) .
 - [LangChain: Chat with Books and PDF Files with Llama 2 and Pinecone (Free LLMs & Embeddings)](https://www.youtube.com/watch?v=ckb4DnHLBrU)
 
+![MultiPDF Chat App](./docs/app.jpg)
+
 ## Introduction
 ------------
 The MultiPDF Chat App is a Python application that allows you to chat with multiple PDF documents. You can ask questions about the PDFs using natural language, and the application will provide relevant responses based on the content of the documents. This app utilizes a language model to generate accurate answers to your queries.
