@@ -27,22 +27,21 @@ Install the required dependencies by running the following command:
    ```
    pip install -r requirements.txt
    ```
-
 Optain these info for authorization:
 - Huggingface API Token: needed when you want to download the LLM from Huggingface at run time. If you choose to pre-download, store and load the model locally, you don't need this token 
 - Pinecone API Key: use for Pinecone auth
-- Pinecone API Env: Pinecone environment where the Index was created
+- Pinecone API Env: Pinecone API environment where the Index was created
+
+Clone the .env.example and rename it to `.env`. Setup the values for below variables:
+- HUGGINGFACEHUB_API_TOKEN=<your Huggingface api token>
+- PINECONE_API_KEY=<your Pinecone API Key>
+- PINECONE_API_ENV=<your Pinecone API Env>
 
 ## Usage
 -----
 To use the MultiPDF Chat App, follow these steps:
 
-1. Ensure that you have installed the required dependencies and added these info to the `.env` file.
-- HUGGINGFACEHUB_API_TOKEN=<your Huggingface api token>
-- PINECONE_API_KEY=<your Pinecone api key>
-- PINECONE_API_ENV=<your Pinecone API>
-
-Open the app.py. Look for the 
+1. Ensure that you have installed the required dependencie.
 
 2. Run the `app.py` file using the Streamlit CLI. Execute the following command:
    ```
