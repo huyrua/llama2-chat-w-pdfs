@@ -1,0 +1,11 @@
+langchain
+PyPDF2==3.0.1
+python-dotenv
+streamlit
+altair
+tiktoken
+huggingface-hub
+unstructured
+sentence_transformers
+pinecone-client
+llama-cpp-python
