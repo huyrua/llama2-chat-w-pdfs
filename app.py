@@ -109,8 +109,8 @@ def handle_userinput(user_question):
     #     ]
     # ]
 
-    # loop thru the chat history and show them all to the UI
-    for qna in st.session_state.chat_history:
+    # loop thru the chat history and show them all to the UI, new one on top
+    for qna in reversed(st.session_state.chat_history):
         for i, message in enumerate(qna):
             if i % 2 == 0: #question
                 st.write(user_template.replace(
