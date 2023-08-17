@@ -1,5 +1,6 @@
 langchain
 PyPDF2==3.0.1
+pypdf
 python-dotenv
 streamlit
 altair
@@ -8,4 +9,4 @@ huggingface-hub
 unstructured
 sentence_transformers
 pinecone-client
-llama-cpp-python
+ctransformers

@@ -1,3 +1,4 @@
+from langchain import LLMChain
 import streamlit as st
 from dotenv import load_dotenv
 from htmlTemplates import css, bot_template, user_template
@@ -7,15 +8,11 @@ from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.vectorstores import Pinecone
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
+from langchain.llms import CTransformers
 from langchain.prompts import PromptTemplate
+from langchain.chains.question_answering import load_qa_chain
 import pinecone
 import os
-
-from langchain.llms import LlamaCpp
-from langchain.callbacks.manager import CallbackManager
-from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
-from huggingface_hub import hf_hub_download
-from langchain.chains.question_answering import load_qa_chain
 
 EMBEDDINGS = HuggingFaceEmbeddings(model_name='sentence-transformers/all-MiniLM-L6-v2')
 
@@ -45,59 +42,84 @@ def add_to_vectorstore(chunks):
 
 
 def get_conversation_chain(vectorstore):
-    # download model on the fly, and cache
-    model_name_or_path = "TheBloke/Llama-2-13B-chat-GGML"
-    model_basename = "llama-2-13b-chat.ggmlv3.q5_1.bin" # the model is in bin format
-    model_path = hf_hub_download(repo_id=model_name_or_path, filename=model_basename)
-
-    # anoother option is to pre-download the model and stored locally, in this case, in ./models/ folder
-    #model_path = './models/llama-2-13b-chat.ggmlv3.q5_1.bin'
+    # change this to your actual model path
     
     max_tokens = 512
-    n_gpu_layers = 40  # Change this value based on your model and your GPU VRAM pool.
-    n_batch = 1024  # Should be between 1 and n_ctx, consider the amount of VRAM in your GPU.
+    n_batch = 1024
     n_ctx = 1024
+    temperature = 0.01
 
-    # Callbacks support token-wise streaming
-    callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
-    # Verbose is required to pass to the callback manager
-
-    # https://python.langchain.com/docs/integrations/llms/llamacpp
-    # Loading model
-    llm = LlamaCpp(
-        model_path=model_path,
-        max_tokens=max_tokens,
-        n_gpu_layers=n_gpu_layers,
-        n_batch=n_batch,
-        callback_manager=callback_manager,
-        n_ctx=n_ctx,
-        verbose=True
-    )
+    # https://python.langchain.com/docs/integrations/providers/ctransformers
+    # llm = CTransformers(model='TheBloke/Llama-2-13B-chat-GGML',
+    #                     model_file='llama-2-13b-chat.ggmlv3.q5_1.bin', 
+    #                     model_type='llama',
+    #                     config = {
+    #                         'max_new_tokens': max_tokens,
+    #                         'temperature': temperature,
+    #                         'batch_size': n_batch,
+    #                         'context_length': n_ctx                            
+    #                     })
     
-    template = """Use the following pieces of context to answer the question at the end. 
-                   If you don't know the answer, please think rationally and answer from your own knowledge base.
-       {context}
-       Question: {question}"""
-    prompt = PromptTemplate(
-        template = template, input_variables=['context', 'question']
-    )
-    prompt = PromptTemplate(template=template, input_variables=["context", "question"])
-
     memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
+    
+    model_path = '../llama2-ggml/llama-2-13b-chat.ggmlv3.q5_1.bin'
+    llm = CTransformers(model=model_path, model_type="llama",
+                    config={
+                        'max_new_tokens': max_tokens,
+                        'temperature': temperature,
+                        'batch_size': n_batch,
+                        'context_length': n_ctx
+                    })
+    
     conversation_chain = ConversationalRetrievalChain.from_llm(
         llm = llm,
         retriever = vectorstore.as_retriever(),
-        memory = memory
+        memory = memory,
+        verbose=False
     )
+    
+    # _template = """Given the following conversation and a follow up question, rephrase the follow up question to be a 
+    #     standalone question without changing the content in given question.
+
+    #     Chat History:
+    #     {chat_history}
+    #     Follow Up Input: {question}
+    #     Standalone question:"""
+    # condense_question_prompt_template = PromptTemplate.from_template(_template)
+
+    # prompt_template = """Use the following context (delimited by <ctx></ctx>) and the chat history (delimited by <hs></hs>) to answer the question:
+    #     <ctx>
+    #     {context}
+    #     </ctx>
+    #     <hs>
+    #     {chat_history}
+    #     </hs>
+    #     Question: {question}
+    #     Answer:"""
+
+    # qa_prompt = PromptTemplate(
+    #     template=prompt_template, input_variables=["context", "question", "chat_history"]
+    # )
+
+    # question_generator = LLMChain(llm=llm, 
+    #                               prompt=condense_question_prompt_template, 
+    #                               memory=memory)
+    # doc_chain = load_qa_chain(llm, chain_type="stuff", prompt=qa_prompt)
+
+    # conversation_chain = ConversationalRetrievalChain(
+    #     retriever=vectorstore.as_retriever(),
+    #     question_generator=question_generator,
+    #     combine_docs_chain=doc_chain,
+    #     memory=memory)
+
     return conversation_chain
 
 def handle_userinput(user_question):
     response = st.session_state.conversation({'question': user_question, 
-                                              "chat_history": st.session_state.chat_history})
+                                              'chat_history': st.session_state.chat_history})
     st.session_state.chat_history.append(response['chat_history'])
-    
     # show the entire chat history:
-    # st.write(st.session_state.chat_history)
+    st.write(st.session_state.chat_history)
     # [
     #     [
     #         "HumanMessage(content='what is the first amendment?', additional_kwargs={}, example=False)",
