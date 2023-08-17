@@ -10,7 +10,6 @@ from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from langchain.llms import CTransformers
 from langchain.prompts import PromptTemplate
-from langchain.chains.question_answering import load_qa_chain
 import pinecone
 import os
 
@@ -49,7 +48,7 @@ def get_conversation_chain(vectorstore):
     n_ctx = 1024
     temperature = 0.01
 
-    # https://python.langchain.com/docs/integrations/providers/ctransformers
+    # download the model from HuggingFace, and cache for later use:
     # llm = CTransformers(model='TheBloke/Llama-2-13B-chat-GGML',
     #                     model_file='llama-2-13b-chat.ggmlv3.q5_1.bin', 
     #                     model_type='llama',
@@ -60,8 +59,7 @@ def get_conversation_chain(vectorstore):
     #                         'context_length': n_ctx                            
     #                     })
     
-    memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
-    
+    # or you can chose to use the pre-downloaded model
     model_path = '../llama2-ggml/llama-2-13b-chat.ggmlv3.q5_1.bin'
     llm = CTransformers(model=model_path, model_type="llama",
                     config={
@@ -70,48 +68,14 @@ def get_conversation_chain(vectorstore):
                         'batch_size': n_batch,
                         'context_length': n_ctx
                     })
-    
+    memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
+
     conversation_chain = ConversationalRetrievalChain.from_llm(
         llm = llm,
         retriever = vectorstore.as_retriever(),
         memory = memory,
         verbose=False
     )
-    
-    # _template = """Given the following conversation and a follow up question, rephrase the follow up question to be a 
-    #     standalone question without changing the content in given question.
-
-    #     Chat History:
-    #     {chat_history}
-    #     Follow Up Input: {question}
-    #     Standalone question:"""
-    # condense_question_prompt_template = PromptTemplate.from_template(_template)
-
-    # prompt_template = """Use the following context (delimited by <ctx></ctx>) and the chat history (delimited by <hs></hs>) to answer the question:
-    #     <ctx>
-    #     {context}
-    #     </ctx>
-    #     <hs>
-    #     {chat_history}
-    #     </hs>
-    #     Question: {question}
-    #     Answer:"""
-
-    # qa_prompt = PromptTemplate(
-    #     template=prompt_template, input_variables=["context", "question", "chat_history"]
-    # )
-
-    # question_generator = LLMChain(llm=llm, 
-    #                               prompt=condense_question_prompt_template, 
-    #                               memory=memory)
-    # doc_chain = load_qa_chain(llm, chain_type="stuff", prompt=qa_prompt)
-
-    # conversation_chain = ConversationalRetrievalChain(
-    #     retriever=vectorstore.as_retriever(),
-    #     question_generator=question_generator,
-    #     combine_docs_chain=doc_chain,
-    #     memory=memory)
-
     return conversation_chain
 
 def handle_userinput(user_question):
