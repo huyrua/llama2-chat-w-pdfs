@@ -83,7 +83,7 @@ def handle_userinput(user_question):
                                               'chat_history': st.session_state.chat_history})
     st.session_state.chat_history.append(response['chat_history'])
     # show the entire chat history:
-    st.write(st.session_state.chat_history)
+    # st.write(st.session_state.chat_history)
     # [
     #     [
     #         "HumanMessage(content='what is the first amendment?', additional_kwargs={}, example=False)",
