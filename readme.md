@@ -49,7 +49,7 @@ Clone the .env.example and rename it to `.env`. Setup the values for below varia
 -----
 To use the MultiPDF Chat App, follow these steps:
 
-1. Ensure that you have installed the required dependencie.
+1. Ensure that you have installed the required dependencies.
 
 2. Run the `app.py` file using the Streamlit CLI. Execute the following command:
    ```
